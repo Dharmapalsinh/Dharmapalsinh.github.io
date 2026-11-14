@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Developer Portfolio | Flutter & Kotlin</title>
+  <meta name="description" content="Personal portfolio of a Mobile Application Developer specializing in Flutter, Dart, Kotlin & Jetpack Compose.">
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            flutter: {
+              DEFAULT: '#02569B',
+              light: '#0175C2',
+              cyan: '#00D2B8'
+            },
+            kotlin: {
+              DEFAULT: '#7F52FF',
+              orange: '#F88909',
+              purple: '#C757BC'
+            },
+            dark: {
+              950: '#07080B',
+              900: '#0C0E14',
+              850: '#11141E',
+              800: '#171B26',
+              700: '#232938'
+            }
+          },
+          animation: {
+            'glow-pulse': 'glowPulse 8s ease-in-out infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'shimmer': 'shimmer 2.5s linear infinite',
+          },
+          keyframes: {
+            glowPulse: {
+              '0%, 100%': { opacity: 0.35, transform: 'scale(1)' },
+              '50%': { opacity: 0.65, transform: 'scale(1.08)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-[#07080b] text-zinc-100 font-sans antialiased selection:bg-purple-500/30 selection:text-white min-h-screen relative overflow-x-hidden">
+
+  <!-- Ambient Background Glows & Subtle Grid -->
+  <div class="fixed inset-0 pointer-events-none z-0">
+    <!-- Grid overlay -->
+    <div class="absolute inset-0 bg-grid opacity-25"></div>
+    <!-- Radial Ambient Blobs -->
+    <div class="absolute top-[-10%] left-1/4 w-[500px] h-[500px] bg-gradient-to-tr from-cyan-500/20 via-blue-600/15 to-transparent rounded-full blur-[120px] animate-glow-pulse"></div>
+    <div class="absolute top-[30%] right-[-5%] w-[600px] h-[600px] bg-gradient-to-bl from-purple-600/20 via-pink-600/15 to-transparent rounded-full blur-[140px] animate-glow-pulse" style="animation-delay: 3s;"></div>
+    <div class="absolute bottom-[-10%] left-1/3 w-[550px] h-[550px] bg-gradient-to-t from-emerald-500/15 via-teal-600/10 to-transparent rounded-full blur-[130px] animate-glow-pulse" style="animation-delay: 5s;"></div>
+  </div>
+
+  <!-- Interactive Spotlight that follows mouse -->
+  <div id="mouse-spotlight" class="pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 opacity-0"></div>
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-4 z-40 max-w-6xl mx-auto px-4 sm:px-6">
+    <nav class="backdrop-blur-xl bg-zinc-900/60 border border-white/[0.08] rounded-2xl px-5 py-3.5 flex items-center justify-between shadow-2xl shadow-black/40">
+      <!-- Logo / Name -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 p-[1px] transition-transform duration-300 group-hover:scale-105 shadow-lg shadow-purple-500/20">
+          <div class="w-full h-full bg-dark-900 rounded-[11px] flex items-center justify-center">
+            <i data-lucide="smartphone" class="w-4 h-4 text-cyan-400 group-hover:text-purple-400 transition-colors"></i>
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-sm tracking-tight text-white flex items-center gap-1.5" id="nav-author-name">
+            Alex Chen
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.06] text-zinc-400 border border-white/[0.06]">Dev</span>
+          </span>
+          <span class="text-[11px] text-zinc-400 font-mono">Flutter &bull; Kotlin</span>
+        </div>
+      </a>
+
+      <!-- Quick Nav Links -->
+      <div class="hidden md:flex items-center gap-6 text-xs font-medium text-zinc-400">
+        <a href="#projects" class="hover:text-white transition-colors">Apps Showcase</a>
+        <a href="#tech-stack" class="hover:text-white transition-colors">Arsenal</a>
+        <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
+        <a href="#terminal-section" class="hover:text-white transition-colors">Terminal</a>
+        <a href="#contact" class="hover:text-white transition-colors">Get in Touch</a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5">
+        <button id="copy-email-nav-btn" class="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-white/[0.06] hover:bg-white/[0.1] text-zinc-200 border border-white/[0.1] rounded-xl transition-all duration-200 active:scale-95">
+          <i data-lucide="copy" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span class="hidden sm:inline">Copy Email</span>
+        </button>
+        <a href="#contact" class="relative group overflow-hidden px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-cyan-500/30 hover:scale-[1.02] active:scale-95">
+          <span>Let's Talk</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Bento Grid Container -->
+  <main class="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-24">
+    
+    <!-- Hero Header Text -->
+    <div class="mb-10 text-center max-w-2xl mx-auto" id="hero">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono mb-4 animate-float">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Available for Mobile Projects & Roles</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+        Architecting <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 bg-clip-text text-transparent">high-performance</span> mobile applications.
+      </h1>
+      <p class="text-zinc-400 text-sm sm:text-base leading-relaxed">
+        Specializing in production-grade <span class="text-cyan-400 font-medium">Flutter</span> cross-platform apps & native <span class="text-purple-400 font-medium">Kotlin</span> (Jetpack Compose). 60fps animations, offline-first architectures, and clean code.
+      </p>
+    </div>
+
+    <!-- BENTO GRID SECTION -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-5 auto-rows-[auto]">
+
+      <!-- BENTO 1: Profile & Bio (md:col-span-7) -->
+      <div class="bento-card md:col-span-7 p-6 sm:p-8 rounded-3xl backdrop-blur-xl bg-dark-900/70 border border-white/[0.08] relative overflow-hidden flex flex-col justify-between group">
+        <!-- Accent Glow -->
+        <div class="card-glow from-cyan-500/10 via-purple-500/10 to-transparent"></div>
+        
+        <div>
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-4">
+              <!-- Avatar with Ring -->
+              <div class="relative">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 p-[2px] shadow-xl shadow-purple-500/20">
+                  <div class="w-full h-full bg-dark-950 rounded-[14px] flex items-center justify-center overflow-hidden">
+                    <!-- Icon / Placeholder Avatar -->
+                    <div class="w-full h-full bg-gradient-to-tr from-slate-900 to-zinc-800 flex items-center justify-center font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+                      AC
+                    </div>
+                  </div>
+                </div>
+                <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-dark-900 flex items-center justify-center" title="Online & Available">
+                  <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                </span>
+              </div>
+
+              <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                  <span id="hero-name">Alex Chen</span>
+                  <i data-lucide="badge-check" class="w-4 h-4 text-cyan-400" title="Verified Mobile Engineer"></i>
+                </h2>
+                <p class="text-xs text-zinc-400 font-mono">Senior Mobile Application Engineer</p>
+                <div class="flex items-center gap-2 mt-1 text-[11px] text-zinc-500">
+                  <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> Worldwide / Remote</span>
+                  <span>&bull;</span>
+                  <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> UTC+5:30</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Social links mini -->
+            <div class="hidden sm:flex items-center gap-2">
+              <a href="https://github.com" target="_blank" rel="noopener" class="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors" title="GitHub">
+                <i data-lucide="github" class="w-4 h-4"></i>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener" class="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors" title="LinkedIn">
+                <i data-lucide="linkedin" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <p class="text-zinc-300 text-sm leading-relaxed mb-6 font-normal">
+            Building end-to-end mobile products that feel effortless to touch. I specialize in <strong class="text-white font-medium">declarative UI architectures</strong>, smooth 120Hz gesture physics, local-first syncing with SQLite/Room, and automated CI/CD pipelines deploying directly to the Play Store and App Store.
+          </p>
+        </div>
+
+        <!-- Quick Stats Pill Row -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/[0.06]">
+          <div class="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+            <div class="text-xl font-bold text-white font-mono counter" data-target="4">4+</div>
+            <div class="text-[11px] text-zinc-400">Years Experience</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+            <div class="text-xl font-bold text-cyan-400 font-mono counter" data-target="18">18+</div>
+            <div class="text-[11px] text-zinc-400">Mobile Apps Built</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+            <div class="text-xl font-bold text-purple-400 font-mono counter" data-target="150">150k+</div>
+            <div class="text-[11px] text-zinc-400">Store Downloads</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+            <div class="text-xl font-bold text-emerald-400 font-mono">99.8%</div>
+            <div class="text-[11px] text-zinc-400">Crash-Free Rate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENTO 2: Interactive Mobile Simulator Feature (md:col-span-5) -->
+      <div id="projects" class="bento-card md:col-span-5 p-6 rounded-3xl backdrop-blur-xl bg-dark-900/70 border border-white/[0.08] relative overflow-hidden flex flex-col justify-between group">
+        <div class="card-glow from-purple-500/10 via-cyan-500/10 to-transparent"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+              <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono">Interactive Device Sandbox</h3>
+            </div>
+            <span class="text-[11px] font-mono text-zinc-400 bg-white/[0.05] px-2 py-0.5 rounded border border-white/[0.06]">Live Simulator</span>
+          </div>
+
+          <!-- App Switcher Selector -->
+          <div class="flex gap-1.5 p-1 bg-black/40 rounded-xl border border-white/[0.06] mb-5">
+            <button class="app-tab active flex-1 py-1.5 px-2 rounded-lg text-xs font-medium text-zinc-300 transition-all flex items-center justify-center gap-1.5" data-app="fintech">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              <span>ApexPay</span>
+            </button>
+            <button class="app-tab flex-1 py-1.5 px-2 rounded-lg text-xs font-medium text-zinc-400 transition-all flex items-center justify-center gap-1.5" data-app="fitness">
+              <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+              <span>PulseFit</span>
+            </button>
+            <button class="app-tab flex-1 py-1.5 px-2 rounded-lg text-xs font-medium text-zinc-400 transition-all flex items-center justify-center gap-1.5" data-app="music">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span>ZenStream</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Phone Frame Preview -->
+        <div class="relative mx-auto w-[250px] sm:w-[270px] h-[390px] rounded-[38px] bg-[#121319] p-2.5 border-[3px] border-zinc-700/60 shadow-2xl shadow-cyan-950/40 transition-transform duration-500 group-hover:scale-[1.01]">
+          <!-- Hardware Buttons Simulation -->
+          <div class="absolute -left-[5px] top-20 w-[2px] h-8 bg-zinc-600 rounded-l"></div>
+          <div class="absolute -left-[5px] top-32 w-[2px] h-8 bg-zinc-600 rounded-l"></div>
+          <div class="absolute -right-[5px] top-24 w-[2px] h-11 bg-zinc-600 rounded-r"></div>
+
+          <!-- Screen Container -->
+          <div class="w-full h-full bg-[#090A0F] rounded-[30px] overflow-hidden relative flex flex-col justify-between text-white border border-white/[0.05]">
+            
+            <!-- Dynamic Island / Status Bar -->
+            <div class="px-4 pt-2 pb-1 flex items-center justify-between text-[10px] text-zinc-400 font-mono z-30 select-none">
+              <span id="phone-clock">09:41</span>
+              <!-- Punch-hole notch -->
+              <div class="w-20 h-4 bg-black rounded-full flex items-center justify-center gap-1 border border-white/[0.08]">
+                <div class="w-2 h-2 rounded-full bg-cyan-500/60"></div>
+                <div class="w-1 h-1 rounded-full bg-zinc-600"></div>
+              </div>
+              <div class="flex items-center gap-1 text-[9px]">
+                <i data-lucide="wifi" class="w-2.5 h-2.5"></i>
+                <i data-lucide="battery" class="w-3 h-3 text-emerald-400"></i>
+              </div>
+            </div>
+
+            <!-- DYNAMIC SCREEN CONTENT CONTAINER -->
+            <div id="phone-screen-content" class="flex-1 px-3.5 py-1.5 overflow-hidden flex flex-col justify-between transition-all duration-300">
+              <!-- Content rendered via app.js -->
+            </div>
+
+            <!-- Home indicator bar -->
+            <div class="pb-1 pt-0.5 flex justify-center">
+              <div class="w-20 h-1 bg-white/30 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone Footer Info -->
+        <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-zinc-400">
+          <div id="app-badge-info" class="flex items-center gap-1.5 text-[11px] font-mono">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            <span>Flutter &bull; BLoC Architecture</span>
+          </div>
+          <span class="text-[11px] text-zinc-500">Click tabs to test</span>
+        </div>
+      </div>
+
+      <!-- BENTO 3: Tech Arsenal & Stack (md:col-span-8) -->
+      <div id="tech-stack" class="bento-card md:col-span-8 p-6 sm:p-7 rounded-3xl backdrop-blur-xl bg-dark-900/70 border border-white/[0.08] relative overflow-hidden flex flex-col justify-between group">
+        <div class="card-glow from-blue-600/10 via-purple-600/10 to-transparent"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i data-lucide="layers" class="w-5 h-5 text-purple-400"></i>
+                Technical Arsenal & Ecosystem
+              </h3>
+              <p class="text-xs text-zinc-400 mt-1">Battle-tested tools and frameworks I use to build scalable mobile solutions.</p>
+            </div>
+            <span class="hidden sm:inline-block text-[11px] font-mono text-zinc-400 bg-white/[0.04] px-2.5 py-1 rounded-lg border border-white/[0.06]">
+              Modern Tooling
+            </span>
+          </div>
+
+          <!-- Stack Category Tabs -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- Category: Mobile Core -->
+            <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-cyan-500/30 transition-colors">
+              <div class="flex items-center gap-2 text-xs font-semibold text-cyan-400 uppercase tracking-wider font-mono mb-3">
+                <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+                Core Frameworks & UI
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="skill-tag border-cyan-500/30 text-cyan-200 bg-cyan-500/10">Flutter 3.x</span>
+                <span class="skill-tag border-cyan-500/20 text-cyan-100">Dart</span>
+                <span class="skill-tag border-purple-500/30 text-purple-200 bg-purple-500/10">Kotlin 2.0</span>
+                <span class="skill-tag border-purple-500/20 text-purple-100">Jetpack Compose</span>
+                <span class="skill-tag">Custom Canvas & Shaders</span>
+                <span class="skill-tag">Material 3 / Cupertino</span>
+              </div>
+            </div>
+
+            <!-- Category: State Management & Architecture -->
+            <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-purple-500/30 transition-colors">
+              <div class="flex items-center gap-2 text-xs font-semibold text-purple-400 uppercase tracking-wider font-mono mb-3">
+                <i data-lucide="git-merge" class="w-3.5 h-3.5"></i>
+                Architecture & State
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="skill-tag border-purple-500/20 text-purple-200">BLoC / Cubit</span>
+                <span class="skill-tag border-purple-500/20 text-purple-200">Riverpod 2.x</span>
+                <span class="skill-tag">Coroutines & Flow</span>
+                <span class="skill-tag">Clean Architecture</span>
+                <span class="skill-tag">MVVM / MVI</span>
+                <span class="skill-tag">Dependency Injection (Hilt / GetIt)</span>
+              </div>
+            </div>
+
+            <!-- Category: Networking & Local Storage -->
+            <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-emerald-500/30 transition-colors">
+              <div class="flex items-center gap-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider font-mono mb-3">
+                <i data-lucide="database" class="w-3.5 h-3.5"></i>
+                Data & Networking
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="skill-tag border-emerald-500/20 text-emerald-200">Ktor Client</span>
+                <span class="skill-tag">Retrofit & OkHttp</span>
+                <span class="skill-tag border-emerald-500/20 text-emerald-200">Room SQLite</span>
+                <span class="skill-tag">Hive / Isar DB</span>
+                <span class="skill-tag">Firebase & Supabase</span>
+                <span class="skill-tag">REST & GraphQL</span>
+              </div>
+            </div>
+
+            <!-- Category: Quality & DevOps -->
+            <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-amber-500/30 transition-colors">
+              <div class="flex items-center gap-2 text-xs font-semibold text-amber-400 uppercase tracking-wider font-mono mb-3">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                Testing & CI/CD
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="skill-tag border-amber-500/20 text-amber-200">Fastlane</span>
+                <span class="skill-tag">GitHub Actions CI/CD</span>
+                <span class="skill-tag">Google Play Console</span>
+                <span class="skill-tag">Apple TestFlight</span>
+                <span class="skill-tag">Unit & Widget Testing</span>
+                <span class="skill-tag">Sentry Crashlytics</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-zinc-500">
+          <span>Targeting iOS 15+ and Android SDK 24 to 35</span>
+          <span class="font-mono text-cyan-400">Continuous Integration Ready</span>
+        </div>
+      </div>
+
+      <!-- BENTO 4: Architecture Pillars (md:col-span-4) -->
+      <div id="architecture" class="bento-card md:col-span-4 p-6 sm:p-7 rounded-3xl backdrop-blur-xl bg-dark-900/70 border border-white/[0.08] relative overflow-hidden flex flex-col justify-between group">
+        <div class="card-glow from-emerald-500/10 via-cyan-500/10 to-transparent"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i data-lucide="cpu" class="w-5 h-5 text-emerald-400"></i>
+              Engineering Code
+            </h3>
+            <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Clean Code</span>
+          </div>
+          
+          <div class="space-y-3.5">
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+              <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 mt-0.5">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-semibold text-white">60/120 FPS Fluidity</h4>
+                <p class="text-[11px] text-zinc-400 leading-snug mt-0.5">Eliminating jank with layout profiling, repainting isolation, and lightweight widget rebuilds.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+              <div class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
+                <i data-lucide="wifi-off" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-semibold text-white">Offline-First Design</h4>
+                <p class="text-[11px] text-zinc-400 leading-snug mt-0.5">Reactive caching, optimistic UI updates, and intelligent background sync queueing.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+              <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-semibold text-white">Clean Modular Arch</h4>
+                <p class="text-[11px] text-zinc-400 leading-snug mt-0.5">Decoupled Domain, Data, and Presentation layers for testability and scale.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-zinc-400">
+          <span class="font-mono text-[11px]">Strict TDD / CI passing</span>
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+        </div>
+      </div>
+
+      <!-- BENTO 5: Interactive Terminal Sandbox (md:col-span-7) -->
+      <div id="terminal-section" class="bento-card md:col-span-7 p-6 rounded-3xl backdrop-blur-xl bg-dark-900/70 border border-white/[0.08] relative overflow-hidden flex flex-col justify-between group">
+        <div class="card-glow from-cyan-500/10 via-blue-500/10 to-transparent"></div>
+
+        <div>
+          <!-- Terminal Header -->
+          <div class="flex items-center justify-between mb-3 pb-3 border-b border-white/[0.06]">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+              <span class="text-xs font-mono text-zinc-400 ml-2">dev@mobile-workstation:~</span>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="runCommand('help')" class="text-[10px] font-mono text-zinc-400 hover:text-white bg-white/[0.05] px-2 py-0.5 rounded border border-white/[0.05]">help</button>
+              <button onclick="runCommand('apps')" class="text-[10px] font-mono text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">apps</button>
+              <button onclick="runCommand('clear')" class="text-[10px] font-mono text-zinc-400 hover:text-white bg-white/[0.05] px-2 py-0.5 rounded border border-white/[0.05]">clear</button>
+            </div>
+          </div>
+
+          <!-- Terminal Output Body -->
+          <div id="terminal-output" class="font-mono text-xs text-zinc-300 space-y-2 h-[175px] overflow-y-auto pr-2 custom-scrollbar">
+            <div class="text-zinc-500">// Welcome to the interactive mobile developer shell. Type or click commands above.</div>
+            <div>
+              <span class="text-emerald-400">&gt;</span> <span class="text-zinc-200">flutter doctor -v</span>
+            </div>
+            <div class="text-cyan-400 pl-3">
+              [✓] Flutter (Channel stable, 3.24.0, on macOS / Windows)<br>
+              [✓] Android toolchain - develop for Android devices (Android SDK 35.0.0)<br>
+              [✓] Xcode - develop for iOS and macOS (Xcode 16.0)<br>
+              [✓] Kotlin compiler 2.0.20 & Jetpack Compose Compiler<br>
+              [✓] Connected device (Pixel 9 Pro, iPhone 16 Pro)
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal Input Prompt -->
+        <div class="mt-3 pt-3 border-t border-white/[0.06] flex items-center gap-2 font-mono text-xs">
+          <span class="text-emerald-400">$</span>
+          <input type="text" id="terminal-input" placeholder="type 'help', 'apps', 'skills', or 'contact'..." class="flex-1 bg-transparent text-white focus:outline-none placeholder:text-zinc-600">
+          <button id="terminal-submit-btn" class="text-zinc-400 hover:text-white px-2 py-1 rounded bg-white/[0.05]">Enter</button>
+        </div>
+      </div>
+
+      <!-- BENTO 6: Featured Projects Cards Showcase (md:col-span-5) -->
+      <div class="bento-card md:col-span-5 p-6 rounded-3xl backdrop-blur-xl bg-dark-900/70 border border-white/[0.08] relative overflow-hidden flex flex-col justify-between group">
+        <div class="card-glow from-pink-500/10 via-purple-500/10 to-transparent"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i data-lucide="package" class="w-5 h-5 text-pink-400"></i>
+              Production Case Studies
+            </h3>
+            <span class="text-xs font-mono text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded border border-pink-500/20">Selected</span>
+          </div>
+
+          <!-- Project List mini -->
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.05] transition-all cursor-pointer" onclick="selectAppTab('fintech')">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                  ApexPay FinTech Wallet
+                </span>
+                <span class="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">Flutter</span>
+              </div>
+              <p class="text-[11px] text-zinc-400 mt-1 line-clamp-1">Biometric auth, real-time charts, AES encrypted storage, Stripe integration.</p>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.05] transition-all cursor-pointer" onclick="selectAppTab('fitness')">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                  PulseFit Health & Workout
+                </span>
+                <span class="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">Kotlin Native</span>
+              </div>
+              <p class="text-[11px] text-zinc-400 mt-1 line-clamp-1">Jetpack Compose UI, Room SQLite offline-first, Bluetooth BLE sensor sync.</p>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.05] transition-all cursor-pointer" onclick="selectAppTab('music')">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  ZenStream Audio & Podcasts
+                </span>
+                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Flutter / Bloc</span>
+              </div>
+              <p class="text-[11px] text-zinc-400 mt-1 line-clamp-1">Background audio playback service, caching layer, and audio equalizer.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs">
+          <span class="text-zinc-500">Tap any to load on simulator</span>
+          <a href="https://github.com" target="_blank" rel="noopener" class="text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1">
+            GitHub Repos <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- BENTO 7: Contact, Resume & CTA (md:col-span-12) -->
+      <div id="contact" class="bento-card md:col-span-12 p-8 sm:p-10 rounded-3xl backdrop-blur-xl bg-gradient-to-br from-dark-900/90 via-dark-850/80 to-dark-900/90 border border-white/[0.1] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 group">
+        <div class="card-glow from-cyan-500/15 via-purple-500/15 to-transparent"></div>
+
+        <div class="max-w-xl text-center md:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-mono mb-3">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Let's build something exceptional
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
+            Have a mobile app in mind or looking for an engineer?
+          </h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            I am currently available for full-time engineering roles, high-impact contract projects, and mobile consulting. Let's discuss your roadmap.
+          </p>
+        </div>
+
+        <!-- Action CTAs -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+          <!-- Copy Email Button -->
+          <button id="copy-email-bottom-btn" class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.12] text-white font-medium text-sm transition-all duration-200 active:scale-95 shadow-lg">
+            <i data-lucide="mail" class="w-4 h-4 text-cyan-400"></i>
+            <span id="copy-email-text">alex.chen.dev@example.com</span>
+            <i data-lucide="copy" class="w-3.5 h-3.5 text-zinc-400"></i>
+          </button>
+
+          <!-- Direct Mail Link -->
+          <a href="mailto:alex.chen.dev@example.com" class="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 via-sky-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-semibold text-sm shadow-xl shadow-purple-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-95">
+            <span>Send Direct Message</span>
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 text-center text-xs text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.05] pt-8">
+      <div>
+        Designed & Built with <span class="text-purple-400">Linear / Apple Bento Aesthetic</span> &bull; 100% Free GitHub Pages Ready
+      </div>
+      <div class="flex items-center gap-4 text-zinc-400">
+        <a href="#hero" class="hover:text-white transition-colors">Back to top ↑</a>
+        <a href="https://github.com" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+        <a href="https://linkedin.com" target="_blank" class="hover:text-white transition-colors">LinkedIn</a>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Toast Notification (for copy email feedback) -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900 border border-cyan-500/40 text-white shadow-2xl shadow-cyan-950/60 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+      <i data-lucide="check" class="w-3.5 h-3.5"></i>
+    </div>
+    <span class="text-xs font-medium" id="toast-message">Email copied to clipboard!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
